@@ -1,6 +1,4 @@
 # -*- encoding: UTF-8 -*-
-require 'rubygems'
-require 'open-uri'
 require File.dirname(__FILE__) + '/../database'
 require File.dirname(__FILE__) + '/../util/message'
 require File.dirname(__FILE__) + '/../util/querybuilder'

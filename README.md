@@ -1,3 +1,3 @@
-# sinatra-crawler
-a crawler gets page title and thumbnail.
+# sinatra-parser-api
+gets page title and thumbnail.
 
