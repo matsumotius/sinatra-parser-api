@@ -11,7 +11,11 @@ class PageService
     @url = url
     @io = open(@url)
     @charset = @io.charset
-    fix_charset if @charset == "iso-8859-1"
+    begin
+      fix_charset if @charset == "iso-8859-1"
+    rescue => e
+      @charset = "utf-8"
+    end
   end
 
   def fix_charset
