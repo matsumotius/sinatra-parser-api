@@ -20,7 +20,7 @@ get '/info' do
   response.json
 end
 
-get '/thumbnail/:id' do
+get '/thumbnail/id/:id' do
   screen = ScreenService.new(params[:url])
   screen_search = screen.find(params[:id])
   if screen_search.is_success
@@ -32,7 +32,7 @@ get '/thumbnail/:id' do
   end
 end
 
-post '/thumbnail' do
+get '/thumbnail/url/:url' do
   if params[:url].to_s.length > 0
     screen = ScreenService.new(params[:url])
     screenshot = screen.shot
