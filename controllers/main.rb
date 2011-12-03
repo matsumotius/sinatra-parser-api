@@ -2,10 +2,10 @@
 require 'rubygems'
 require 'sinatra'
 require 'open-uri'
-require File.dirname(__FILE__) + '/util/response'
-require File.dirname(__FILE__) + '/util/message'
-require File.dirname(__FILE__) + '/service/page'
-require File.dirname(__FILE__) + '/service/screen'
+require File.dirname(__FILE__) + '/../util/response'
+require File.dirname(__FILE__) + '/../util/message'
+require File.dirname(__FILE__) + '/../service/page'
+require File.dirname(__FILE__) + '/../service/screen'
 # module
 include Response
 include Message::Error
