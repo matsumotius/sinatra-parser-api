@@ -8,14 +8,14 @@ require File.dirname(__FILE__) + '/../dao/thumbnail'
 include Response
 include Message::Error
 
-class ScreenService
+class ThumbnailService
   def initialize(url)
     @url = url
     @option = { :url => @url, :id => Digest::MD5.hexdigest(Time.now.to_i.to_s) }
     @thumbnail = Thumbnail.new
   end
 
-  def shot
+  def get
     begin
       command = "web-snapshooter -u #{@option[:url]} --output-file tmp/#{@option[:id]}.png --browser-size 800x800 --output-size 160x160"
       `#{command}`
@@ -37,9 +37,9 @@ class ScreenService
     end
   end
 
-  def find(id)
+  def find(url)
     begin
-      result = @thumbnail.find_by_id(id)
+      result = @thumbnail.find_by_url(url)
       if result
         Response::success({ :data => result })
       else

@@ -11,6 +11,13 @@ class Thumbnail < Database
     rows.fetch_hash
   end
 
+  def find_by_url(url)
+    query = QueryBuilder.new
+    query = query.select('*').from('thumbnail').where('url', '=', url)
+    rows = @db.query(query.build)
+    rows.fetch_hash
+  end
+
   def save(id, data, url)
     query = 'INSERT INTO thumbnail(id, data, url) VALUES (?, ?, ?)'
     statement = @db.prepare(query)
