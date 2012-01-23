@@ -10,27 +10,42 @@ require File.dirname(__FILE__) + '/../service/thumbnail'
 include Response
 include Message::Error
 
-get '/info' do
-  if params[:url].to_s.length > 0
-    page_service = PageService.new(params[:url])
-    response = page_service.get_info
-  else
-    response = Response::error({ :message => Message::Error::required_parameter("url") })
+before do
+  unless params[:url]
+    content_type "json"
+    halt 400, Response::error({ :message => "Invalid Parameter Error" }).json
   end
+end
+
+get '/info' do
+  page_service = PageService.new(params[:url])
+  response = page_service.get_info
   response.json
 end
 
 get '/thumbnail' do
-  if params[:url].to_s.length > 0
-    thumbnail = ThumbnailService.new(params[:url])
-    get_thumbnail = thumbnail.get
-    if get_thumbnail.is_success
-      content_type "png"
-      get_thumbnail.data['data'].unpack('m')[0]
-    else
-      status 404
-    end
+  thumbnail = ThumbnailService.new
+  find_thumbnail = thumbnail.find(params[:url])
+  if find_thumbnail.is_success
+    content_type "png"
+    find_thumbnail.data["data"].unpack('m')[0]
   else
-    status 400
+    halt 404, Response::error({ :message => "Not Found Error" }).json
+  end
+end
+
+post '/thumbnail' do
+  content_type "json"
+
+  if request.ip != "127.0.0.1"
+    halt 403, Response::error({ :message => "Invalid Request Error" }).json
+  end
+
+  thumbnail = ThumbnailService.new
+  make_thumbnail = thumbnail.make(params[:url])
+  if make_thumbnail.is_success
+    make_thumbnail.json
+  else
+    halt 500, Response::error({ :message => "Internal Error" }).json
   end
 end

@@ -9,17 +9,30 @@ include Response
 include Message::Error
 
 class ThumbnailService
-  def initialize(url)
-    @url = url
-    @option = { :url => @url, :id => Digest::MD5.hexdigest(Time.now.to_i.to_s) }
+  def initialize
+    @option = { :id => Digest::MD5.hexdigest(Time.now.to_i.to_s) }
     @thumbnail = Thumbnail.new
   end
 
-  def get
+  def response_without_image(data)
+    Response::success({ :data => { "id" => data["id"], "url" => data["url"] } })
+  end
+
+  def make(url)
     begin
-      command = "web-snapshooter -u #{@option[:url]} --output-file tmp/#{@option[:id]}.png --browser-size 800x800 --output-size 160x160"
-      `#{command}`
-      Response::success({ :data => { :id => "#{@option[:id]}", :path => "tmp/#{@option[:id]}.png" } })
+      find_thumbnail = self.find(url)
+      if find_thumbnail.is_success
+        return response_without_image(find_thumbnail.data)
+      end
+
+      xvfb_command = "xvfb-run -a --server-args=\"-screen 0 700x500x24\""
+      ruby_command = "ruby #{File.dirname(__FILE__)}/../tool/screenshot.rb #{@option[:id]} #{url}"
+      `#{xvfb_command} #{ruby_command}`
+
+      save_thumbnail = self.persist(@option[:id], "#{File.dirname(__FILE__)}/../tmp/#{@option[:id]}.png", url)
+      if save_thumbnail.is_success
+        return response_without_image(save_thumbnail.data)
+      end
     rescue => e
       puts e
       Response::error({ :message => Message::Error::internal })
@@ -30,7 +43,7 @@ class ThumbnailService
     begin
       data = [open(path).read].pack("m")
       @thumbnail.save(id, data, url)
-      Response::success({ :data => { :id => id } })
+      Response::success({ :data => { "id" => id, "url" => url, "data" => data } })
     rescue => e
       puts e
       Response::error({ :message => Message::Error::internal })
