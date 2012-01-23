@@ -38,7 +38,7 @@ end
 post '/thumbnail' do
   content_type "json"
 
-  if request.ip != "127.0.0.1"
+  if request.ip != @@conf['localhost']
     halt 403, Response::error({ :message => "Invalid Request Error" }).json
   end
 

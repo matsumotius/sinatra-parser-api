@@ -1,3 +1,4 @@
-database : 'sample'
-password : 'sample'
-username : 'sample'
+database  : 'sample'
+password  : 'sample'
+username  : 'sample'
+localhost : 'sample'
