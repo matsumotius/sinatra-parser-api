@@ -32,6 +32,8 @@ class ThumbnailService
       save_thumbnail = self.persist(@option[:id], "#{File.dirname(__FILE__)}/../tmp/#{@option[:id]}.png", url)
       if save_thumbnail.is_success
         return response_without_image(save_thumbnail.data)
+      else
+        return Response::error({ :message => Message::Error::internal })
       end
     rescue => e
       puts e
