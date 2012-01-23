@@ -6,7 +6,7 @@ gets page title and thumbnail.
 ### Gem
 ```
 gem install nokogiri
-gem install mysql-ruby
+gem install ruby-mysql
 gem install sinatra
 gem install rack
 gem install thin
