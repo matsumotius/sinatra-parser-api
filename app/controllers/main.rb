@@ -30,7 +30,8 @@ get '/thumbnail' do
     content_type "png"
     find_thumbnail.data["data"].unpack('m')[0]
   else
-    halt 404, Response::error({ :message => "Not Found Error" }).json
+    content_type "gif"
+    open(File.dirname(__FILE__) + "/../../resource/image/404.gif").read
   end
 end
 
