@@ -11,7 +11,7 @@ class Screen < Gtk::Window
     @option = {
       :id   => id,
       :url  => url,
-      :size => [700, 500],
+      :size => [840, 600],
       :path => File.dirname(__FILE__) + "/../tmp/#{id}.png"
     }
     self.border_width = 0

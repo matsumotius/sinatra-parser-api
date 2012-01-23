@@ -25,7 +25,7 @@ class ThumbnailService
         return response_without_image(find_thumbnail.data)
       end
 
-      xvfb_command = "xvfb-run -a --server-args=\"-screen 0 700x500x24\""
+      xvfb_command = "xvfb-run -a --server-args=\"-screen 0 840x600x24\""
       ruby_command = "ruby #{File.dirname(__FILE__)}/../tool/screenshot.rb #{@option[:id]} #{url}"
       `#{xvfb_command} #{ruby_command}`
 
